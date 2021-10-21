@@ -1,9 +1,9 @@
 class Qemu < Formula
   desc "Emulator for x86 and PowerPC"
   homepage "https://www.qemu.org/"
-  url "https://github.com/shchuko/qemu/releases/download/vmnet-v6.1.0-patches-v3/qemu-v6.1.0-vmnet-v3.tar.gz"
-  version "v6.1.0-vmnet-v3"
-  sha256 "8d3fbc09069531cb0f4b0da7385167221529fb85c689d3153e029145acc39058"
+  url "https://github.com/shchuko/qemu/releases/download/v6.1.0-vmnet-v3-oskdirect-v1/qemu-v6.1.0-vmnet-v3-oskdirect-v1.tar.gz"
+  version "v6.1.0-vmnet-v3-oskdirect-v1"
+  sha256 "b94192ddef6025e2baf074fb218180d1c82413bd684b1fafe7c334a7e18bbe0f"
   license "GPL-2.0-only"
   head "https://github.com/shchuko/qemu.git", branch: "master"
 
