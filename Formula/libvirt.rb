@@ -2,7 +2,7 @@ class Libvirt < Formula
   desc "C virtualization API"
   homepage "https://github.com/shchuko/libvirt"
   url "https://github.com/shchuko/libvirt/releases/download/v7.8.0/libvirt-v7.8.0.tar.gz"
-  version "7.8.0"
+#   version "7.8.0"
   sha256 "4af9338e64f817d0ce6f0b8a24a9e2f72ae7ff787a66afe54ea37fa9e448655d"
   license all_of: ["LGPL-2.1-or-later", "GPL-2.0-or-later"]
   head "https://github.com/shchuko/libvirt.git", branch: "master"
