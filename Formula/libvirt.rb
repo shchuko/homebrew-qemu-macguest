@@ -36,6 +36,7 @@ class Libvirt < Formula
         -Ddriver_esx=enabled
         -Ddriver_qemu=enabled
         -Dinit_script=none
+        -Ddocs=disabled
       ]
       system "meson", *std_meson_args, *args, ".."
       system "meson", "compile"
