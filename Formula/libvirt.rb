@@ -49,6 +49,12 @@ class Libvirt < Formula
     environment_variables PATH: HOMEBREW_PREFIX/"bin"
   end
 
+  service do
+    run [opt_sbin/"virtlogd", "-f", etc/"libvirt/virtlogd.conf"]
+    keep_alive true
+    environment_variables PATH: HOMEBREW_PREFIX/"bin"
+  end
+
   test do
     if build.head?
       output = shell_output("#{bin}/virsh -V")
