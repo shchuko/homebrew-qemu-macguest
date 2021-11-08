@@ -32,6 +32,12 @@ class Libvirt < Formula
   def libvirtd_plist_path; prefix+(libvirtd_plist_name+'.plist') end
   def virtlogd_plist_path; prefix+(virtlogd_plist_name+'.plist') end
 
+  def libvirt_enable_script_name; "libvirt-enable.sh" end
+  def libvirt_disable_script_name; "libvirt-disable.sh" end
+
+  def libvirt_enable_script_path; bin+libvirt_enable_script_name end
+  def libvirt_disable_script_path; bin+libvirt_disable_script_name end
+
   def libvirtd_plist
     <<~EOS
       <?xml version="1.0" encoding="UTF-8"?>
@@ -82,6 +88,36 @@ class Libvirt < Formula
     EOS
   end
 
+  def libvirt_enable_script
+    <<~EOS
+      #!/bin/bash
+      if [[ "$EUID" -ne 0 ]]
+        then echo "Please run as root"
+        exit
+      fi
+      set -x
+      cp -fi #{libvirtd_plist_path} /Library/LaunchDaemons/
+      cp -fi #{virtlogd_plist_path} /Library/LaunchDaemons/
+      launchctl load /Library/LaunchDaemons/#{(libvirtd_plist_name+'.plist')}
+      launchctl load /Library/LaunchDaemons/#{(virtlogd_plist_name+'.plist')}
+    EOS
+  end
+
+  def libvirt_disable_script
+    <<~EOS
+      #!/bin/bash
+      if [[ "$EUID" -ne 0 ]]
+        then echo "Please run as root"
+        exit
+      fi
+      set -x
+      launchctl unload /Library/LaunchDaemons/#{(libvirtd_plist_name+'.plist')}
+      launchctl unload /Library/LaunchDaemons/#{(virtlogd_plist_name+'.plist')}
+      rm -i /Library/LaunchDaemons/#{(libvirtd_plist_name+'.plist')}
+      rm -i /Library/LaunchDaemons/#{(virtlogd_plist_name+'.plist')}
+    EOS
+  end
+
   def install
     mkdir "build" do
       args = %W[
@@ -104,22 +140,27 @@ class Libvirt < Formula
       File.open(virtlogd_plist_path, 'w') do |f|
         f.puts virtlogd_plist
       end
+
+      mkdir_p bin
+      File.open(libvirt_enable_script_path, 'w') do |f|
+        f.puts libvirt_enable_script
+      end
+
+      File.open(libvirt_disable_script_path, 'w') do |f|
+        f.puts libvirt_disable_script
+      end
     end
   end
 
 
   def caveats; <<~EOS
-      To enable libvirt services run:
-        sudo cp -f #{libvirtd_plist_path} /Library/LaunchDaemons/
-        sudo cp -f #{virtlogd_plist_path} /Library/LaunchDaemons/
-        sudo launchctl load /Library/LaunchDaemons/#{(libvirtd_plist_name+'.plist')}
-        sudo launchctl load /Library/LaunchDaemons/#{(virtlogd_plist_name+'.plist')}
+      Please IGNORE brew's message about running libvirt as its service.
+      Instead you should run:
+      * To enable libvirt services:
+        sudo #{libvirt_enable_script_name}
 
-      To disable libvirt services or/and before `brew uninstall`:
-        sudo launchctl unload /Library/LaunchDaemons/#{(libvirtd_plist_name+'.plist')}
-        sudo launchctl unload /Library/LaunchDaemons/#{(virtlogd_plist_name+'.plist')}
-        sudo rm /Library/LaunchDaemons/#{(libvirtd_plist_name+'.plist')}
-        sudo rm /Library/LaunchDaemons/#{(virtlogd_plist_name+'.plist')}
+      * To disable libvirt services:
+        sudo #{libvirt_disable_script_name}
     EOS
   end
 

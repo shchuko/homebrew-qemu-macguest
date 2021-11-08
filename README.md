@@ -24,27 +24,16 @@ After `brew install shchuko/qemu-macguest/libvirt` you should NOT run `brew serv
 Run its daemons using launchctl directly:
 
 ```bash
-# Copy launchd.plist configs
-sudo cp -fi "/usr/local/opt/libvirt/libvirtd.service.plist" "/Library/LaunchDaemons/"
-sudo cp -fi "/usr/local/opt/libvirt/virtlogd.service.plist" "/Library/LaunchDaemons/"
-# Launch 'libvirtd' and 'virtlogd' daemons
-sudo launchctl load "/Library/LaunchDaemons/libvirtd.service.plist"
-sudo launchctl load "/Library/LaunchDaemons/virtlogd.service.plist"
+sudo libvirt-enable.sh
 ```
 
 Before `brew remove libvirt`, run:
 
 ```bash
-# Unload 'libvirtd' and 'virtlogd'
-sudo launchctl uload "/Library/LaunchDaemons/libvirtd.service.plist"
-sudo launchctl uload "/Library/LaunchDaemons/virtlogd.service.plist"
-
-# Remove launchd.plist configs
-sudo rm "/usr/local/opt/libvirt/libvirtd.service.plist" "/Library/LaunchDaemons/"
-sudo rm "/usr/local/opt/libvirt/virtlogd.service.plist" "/Library/LaunchDaemons/"
+sudo libvirt-disable.sh
 ```
 
-After install, it may be required to remove some files manually. Check there paths:
+After install, it may be required to remove some files manually. Check these paths:
 ```
 /usr/local/var/cache/libvirt
 /usr/local/var/lib/libvirt
