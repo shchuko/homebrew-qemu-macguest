@@ -1,9 +1,8 @@
 class Qemu < Formula
   desc "Emulator for x86 and PowerPC"
   homepage "https://www.qemu.org/"
-  url "https://github.com/shchuko/qemu/releases/download/v6.1.0-vmnet-v3-hostosk-v3/qemu-v6.1.0-vmnet-v3-hostosk-v3.tar.gz"
-#   version "v6.1.0-vmnet-v3-hostosk-v3"
-  sha256 "95a4d6d9e854301e5049b79a1cec6ec3365d6d36d5c4b5faf2aced837ae94e78"
+  url "https://github.com/shchuko/qemu/releases/download/v6.2.0-vmnet-v20-hostosk-v8/qemu-v6.2.0-vmnet-v20-hostosk-v8.tar.gz"
+  sha256 "6007d6df90593f901f8dfe62366279eec22a45768526c2837d6dd533b51b6c9a"
   license "GPL-2.0-only"
   head "https://github.com/shchuko/qemu.git", branch: "master"
 
@@ -70,8 +69,6 @@ class Qemu < Formula
   test do
     expected = build.stable? ? version.to_s : "QEMU Project"
     assert_match expected, shell_output("#{bin}/qemu-system-x86_64 --version")
-    resource("test-image").stage testpath
-    assert_match "file format: raw", shell_output("#{bin}/qemu-img info FLOPPY.img")
   end
 end
 
